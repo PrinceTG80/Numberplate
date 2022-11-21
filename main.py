@@ -192,32 +192,32 @@ class Image_Processing:
         
         img2 = cv2.GaussianBlur(self.img, (5,5), 0)
 
-        cv2.imshow("Image of car ",img2)
-        cv2.waitKey(1000)
-        cv2.destroyAllWindows()
+        # cv2.imshow("Image of car ",img2)
+        # cv2.waitKey(1000)
+        # cv2.destroyAllWindows()
 
         img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
-        cv2.imshow("Image of car ",img2)
-        cv2.waitKey(1000)
-        cv2.destroyAllWindows()
+        # cv2.imshow("Image of car ",img2)
+        # cv2.waitKey(1000)
+        # cv2.destroyAllWindows()
         
         img2 = cv2.Sobel(img2,cv2.CV_8U,1,0,ksize=3)
-        cv2.imshow("Image of car ",img2)
-        cv2.waitKey(1000)
-        cv2.destroyAllWindows()	
+        # cv2.imshow("Image of car ",img2)
+        # cv2.waitKey(1000)
+        # cv2.destroyAllWindows()	
         _,img2 = cv2.threshold(img2,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
         
         element = cv2.getStructuringElement(shape=cv2.MORPH_RECT, ksize=(17, 3))
         morph_img_threshold = img2.copy()
         cv2.morphologyEx(src=img2, op=cv2.MORPH_CLOSE, kernel=element, dst=morph_img_threshold)
-        cv2.imshow("Image of car ",img2)
-        cv2.waitKey(1000)
-        cv2.destroyAllWindows()
+        # cv2.imshow("Image of car ",img2)
+        # cv2.waitKey(1000)
+        # cv2.destroyAllWindows()
         num_contours, hierarchy= cv2.findContours(morph_img_threshold,mode=cv2.RETR_EXTERNAL,method=cv2.CHAIN_APPROX_NONE)
         cv2.drawContours(img2, num_contours, -1, (0,255,0), 1)
-        cv2.imshow("Image of car ",img2)
-        cv2.waitKey(1000)
-        cv2.destroyAllWindows()
+        # cv2.imshow("Image of car ",img2)
+        # cv2.waitKey(1000)
+        # cv2.destroyAllWindows()
         
         
         for i,cnt in enumerate(num_contours):
