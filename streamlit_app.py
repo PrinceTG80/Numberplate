@@ -293,19 +293,37 @@ def main():
                     roi_img = masked[y : y + h, x : x + w]
                     st.write(roi[1])
                     st.image(roi_img)
-
         col14,col15,col16 = st.columns(3)
         with col14:
-            st.subheader("Number Plate")                   
+            st.subheader("Gray Scale image")                   
             number_plate,img1,img2,edged,image1,image2,new_img=image.number_plate_detection()
             st.image(img1)
+        with col15:
+            st.subheader("Smoothened image")                   
+            st.image(img2)
+        with col16:
+            st.subheader("Edged image")                   
+            st.image(edged)
+        col20,col21,col22 =st.columns(3)
+        with col20:
+            st.subheader("All Contours drawn image")                   
+            st.image(image1)
+        with col21:
+            st.subheader("TOp 30 contours image")                   
+            st.image(image2)
+        with col22:
+            st.subheader("Focused image")                   
+            st.image(new_img)
+        col17,col18,col19 = st.columns(3)
+        with col17:
+            st.subheader("Number Plate")
             res2 = str("".join(re.split("[^a-zA-Z0-9]*", str(number_plate))))
             res2=res2.upper()
             st.text(res2)
             carid = res2
                 # print(res2)
         
-        with col15:
+        with col18:
             st.subheader("Check Payment")
             val = json.load(open("entries.json"))
             if carid in val:
@@ -318,7 +336,7 @@ def main():
                 st.text("The Vehicle is not Allowed")
             # st.text(val)
 
-        with col16:
+        with col19:
             st.subheader("Mark paid")
             val = json.load(open("entries.json"))
             if carid in val:
