@@ -11,7 +11,7 @@ import glob
 import numpy as np
 from PIL import Image
 import re
-
+import json
 
 def main():
     """define the steamlit UI"""
@@ -268,7 +268,7 @@ def main():
                 st.write("No contour detected")
                 text = ""
 
-        col11, col12, col13, col14 = st.columns(4)
+        col11, col12, col13 = st.columns(3)
         with col13:
             st.subheader("PyTesseract settings")
             psm = st.radio(
@@ -292,6 +292,8 @@ def main():
                     roi_img = masked[y : y + h, x : x + w]
                     st.write(roi[1])
                     st.image(roi_img)
+
+        col14,col15,col16 = st.columns(3)
         with col14:
             st.subheader("Number Plate")                   
             number_plate=image.number_plate_detection()
@@ -299,4 +301,6 @@ def main():
             res2 = str("".join(re.split("[^a-zA-Z0-9]*", str(number_plate))))
             res2=res2.upper()
             st.text(res2)
+            val = json.loads("../entries.json")
+            st.text(val)
                 # print(res2)
