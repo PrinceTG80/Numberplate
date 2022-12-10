@@ -297,8 +297,8 @@ def main():
         col14,col15,col16 = st.columns(3)
         with col14:
             st.subheader("Number Plate")                   
-            number_plate=image.number_plate_detection()
-            # st.image(number_plate)
+            number_plate,img1,img2,edged,image1,image2,new_img=image.number_plate_detection()
+            st.image(img1)
             res2 = str("".join(re.split("[^a-zA-Z0-9]*", str(number_plate))))
             res2=res2.upper()
             st.text(res2)

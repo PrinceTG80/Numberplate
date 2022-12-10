@@ -189,13 +189,13 @@ class Image_Processing:
         #     else:
         #         return True
         
-        img2 = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+        img1 = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
         # cv2.imshow("Image of car ",img2)
         # cv2.waitKey(1000)
         # cv2.destroyAllWindows()
         
         # img2 = cv2.GaussianBlur(img2, (5,5), 0)
-        img2 = cv2.bilateralFilter(img2, 11, 17, 17) 
+        img2 = cv2.bilateralFilter(img1, 11, 17, 17) 
         # cv2.imshow("Image of car ",img2)
         # cv2.waitKey(1000)
         # cv2.destroyAllWindows()
@@ -233,7 +233,7 @@ class Image_Processing:
                     break
                 i+=1
                 break
-        return num_plate
+        return num_plate,img1,img2,edged,image1,image2,new_img
         # img2 = cv2.GaussianBlur(self.img, (5,5), 0)
 
         # # cv2.imshow("Image of car ",img2)
