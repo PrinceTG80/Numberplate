@@ -202,23 +202,23 @@ def main():
             thresh = image.threshold_img(lower, upper)
             st.image(thresh)
 
-        # col3, col4 = st.columns(2)
-        # with col4:
-        #     st.subheader("Mask settings")
-        #     choice_struct = st.radio(
-        #         "Structuring element",
-        #         config.structuring_element,
-        #         index=2,
-        #     )
-        #     choice_morph = st.radio(
-        #         "Morphological operation",
-        #         config.morphological_operation,
-        #         index=3,
-        #     )
-        # with col3:
-        #     st.subheader("Masked image")
-        #     masked = image.mask_img(thresh, choice_struct, choice_morph)
-        #     st.image(masked)
+        col3, col4 = st.columns(2)
+        with col4:
+            st.subheader("Mask settings")
+            choice_struct = st.radio(
+                "Structuring element",
+                config.structuring_element,
+                index=2,
+            )
+            choice_morph = st.radio(
+                "Morphological operation",
+                config.morphological_operation,
+                index=3,
+            )
+        with col3:
+            st.subheader("Masked image")
+            masked = image.mask_img(thresh, choice_struct, choice_morph)
+            st.image(masked)
 
         # col5, col6 = st.columns(2)
         # with col6:
