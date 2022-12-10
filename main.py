@@ -129,111 +129,155 @@ class Image_Processing:
             cv2.imwrite(f"{path}/{x}.jpg", roi_img)
 
     def number_plate_detection(self):
-        def clean2_plate(plate):
-            gray_img = cv2.cvtColor(plate, cv2.COLOR_BGR2GRAY)
+        # def clean2_plate(plate):
+        #     gray_img = cv2.cvtColor(plate, cv2.COLOR_BGR2GRAY)
         
-            _, thresh = cv2.threshold(gray_img, 110, 255, cv2.THRESH_BINARY)
-            # if cv2.waitKey(0) & 0xff == ord('q'):
-            #     pass
-            num_contours,hierarchy = cv2.findContours(thresh.copy(),cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+        #     _, thresh = cv2.threshold(gray_img, 110, 255, cv2.THRESH_BINARY)
+        #     # if cv2.waitKey(0) & 0xff == ord('q'):
+        #     #     pass
+        #     num_contours,hierarchy = cv2.findContours(thresh.copy(),cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         
-            if num_contours:
-                contour_area = [cv2.contourArea(c) for c in num_contours]
-                max_cntr_index = np.argmax(contour_area)
+        #     if num_contours:
+        #         contour_area = [cv2.contourArea(c) for c in num_contours]
+        #         max_cntr_index = np.argmax(contour_area)
         
-                max_cnt = num_contours[max_cntr_index]
-                max_cntArea = contour_area[max_cntr_index]
-                x,y,w,h = cv2.boundingRect(max_cnt)
+        #         max_cnt = num_contours[max_cntr_index]
+        #         max_cntArea = contour_area[max_cntr_index]
+        #         x,y,w,h = cv2.boundingRect(max_cnt)
         
-                if not ratioCheck(max_cntArea,w,h):
-                    return plate,None
+        #         if not ratioCheck(max_cntArea,w,h):
+        #             return plate,None
         
-                final_img = thresh[y:y+h, x:x+w]
-                return final_img,[x,y,w,h]
+        #         final_img = thresh[y:y+h, x:x+w]
+        #         return final_img,[x,y,w,h]
         
-            else:
-                return plate,None
+        #     else:
+        #         return plate,None
         
-        def ratioCheck(area, width, height):
-            ratio = float(width) / float(height)
-            if ratio < 1:
-                ratio = 1 / ratio
-            if (area < 1063.62 or area > 73862.5) or (ratio < 3 or ratio > 6):
-                return False
-            return True
+        # def ratioCheck(area, width, height):
+        #     ratio = float(width) / float(height)
+        #     if ratio < 1:
+        #         ratio = 1 / ratio
+        #     if (area < 1063.62 or area > 73862.5) or (ratio < 3 or ratio > 6):
+        #         return False
+        #     return True
         
-        def isMaxWhite(plate):
-            avg = np.mean(plate)
-            if(avg>=115):
-                return True
-            else:
-                return False
+        # def isMaxWhite(plate):
+        #     avg = np.mean(plate)
+        #     if(avg>=115):
+        #         return True
+        #     else:
+        #         return False
         
-        def ratio_and_rotation(rect):
-            (x, y), (width, height), rect_angle = rect
+        # def ratio_and_rotation(rect):
+        #     (x, y), (width, height), rect_angle = rect
         
-            if(width>height):
-                angle = -rect_angle
-            else:
-                angle = 90 + rect_angle
+        #     if(width>height):
+        #         angle = -rect_angle
+        #     else:
+        #         angle = 90 + rect_angle
         
-            if angle>15:
-                return False
+        #     if angle>15:
+        #         return False
         
-            if height == 0 or width == 0:
-                return False
+        #     if height == 0 or width == 0:
+        #         return False
         
-            area = height*width
-            if not ratioCheck(area,width,height):
-                return False
-            else:
-                return True
+        #     area = height*width
+        #     if not ratioCheck(area,width,height):
+        #         return False
+        #     else:
+        #         return True
         
+        img2 = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
+        cv2.imshow("Image of car ",img2)
+        cv2.waitKey(1000)
+        cv2.destroyAllWindows()
         
-        img2 = cv2.GaussianBlur(self.img, (5,5), 0)
+        # img2 = cv2.GaussianBlur(img2, (5,5), 0)
+        img2 = cv2.bilateralFilter(img2, 11, 17, 17) 
+        cv2.imshow("Image of car ",img2)
+        cv2.waitKey(1000)
+        cv2.destroyAllWindows()
 
-        # cv2.imshow("Image of car ",img2)
-        # cv2.waitKey(1000)
-        # cv2.destroyAllWindows()
+        edged = cv2.Canny(img2, 100, 200,apertureSize = 3, L2gradient = True) 
+        cv2.imshow("edged image", edged)
+        cv2.waitKey(1000)
+        cv2.destroyAllWindows()
 
-        img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
-        # cv2.imshow("Image of car ",img2)
-        # cv2.waitKey(1000)
-        # cv2.destroyAllWindows()
+        cnts,new = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+        image1=self.img.copy()
+        cv2.drawContours(image1,cnts,-1,(0,255,0),3)
+        cv2.imshow("contours",image1)
+        cv2.waitKey(1000)
+        cv2.destroyAllWindows()
+
+        cnts = sorted(cnts, key = cv2.contourArea, reverse = True) [:30]
+        image2 = self.img.copy()
+        cv2.drawContours(image2,cnts,-1,(0,255,0),3)
+        cv2.imshow("Top 30 contours",image2)
+        cv2.waitKey(1000)
+        cv2.destroyAllWindows()
+        num_plate = "NONE"
+        i=7
+        for c in cnts:
+            perimeter = cv2.arcLength(c, True)
+            approx = cv2.approxPolyDP(c, 0.018 * perimeter, True)
+            if len(approx) == 4: 
+                x,y,w,h = cv2.boundingRect(c) 
+                new_img=self.img[y:y+h,x:x+w]
+                plate = pytesseract.image_to_string(new_img, lang='eng')
+                if(len(str(plate)) > 2):
+                    print("plate1: " + plate)
+                    num_plate = plate
+                    break
+                i+=1
+                break
+        return num_plate
+        # img2 = cv2.GaussianBlur(self.img, (5,5), 0)
+
+        # # cv2.imshow("Image of car ",img2)
+        # # cv2.waitKey(1000)
+        # # cv2.destroyAllWindows()
+
+        # img2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+        # # cv2.imshow("Image of car ",img2)
+        # # cv2.waitKey(1000)
+        # # cv2.destroyAllWindows()
         
-        img2 = cv2.Sobel(img2,cv2.CV_8U,1,0,ksize=3)
-        # cv2.imshow("Image of car ",img2)
-        # cv2.waitKey(1000)
-        # cv2.destroyAllWindows()	
-        _,img2 = cv2.threshold(img2,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+        # img2 = cv2.Sobel(img2,cv2.CV_8U,1,0,ksize=3)
+        # # cv2.imshow("Image of car ",img2)
+        # # cv2.waitKey(1000)
+        # # cv2.destroyAllWindows()	
+        # _,img2 = cv2.threshold(img2,0,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
         
-        element = cv2.getStructuringElement(shape=cv2.MORPH_RECT, ksize=(17, 3))
-        morph_img_threshold = img2.copy()
-        cv2.morphologyEx(src=img2, op=cv2.MORPH_CLOSE, kernel=element, dst=morph_img_threshold)
-        # cv2.imshow("Image of car ",img2)
-        # cv2.waitKey(1000)
-        # cv2.destroyAllWindows()
-        num_contours, hierarchy= cv2.findContours(morph_img_threshold,mode=cv2.RETR_EXTERNAL,method=cv2.CHAIN_APPROX_NONE)
-        cv2.drawContours(img2, num_contours, -1, (0,255,0), 1)
-        # cv2.imshow("Image of car ",img2)
-        # cv2.waitKey(1000)
-        # cv2.destroyAllWindows()
+        # element = cv2.getStructuringElement(shape=cv2.MORPH_RECT, ksize=(17, 3))
+        # morph_img_threshold = img2.copy()
+        # cv2.morphologyEx(src=img2, op=cv2.MORPH_CLOSE, kernel=element, dst=morph_img_threshold)
+        # # cv2.imshow("Image of car ",img2)
+        # # cv2.waitKey(1000)
+        # # cv2.destroyAllWindows()
+        # num_contours, hierarchy= cv2.findContours(morph_img_threshold,mode=cv2.RETR_EXTERNAL,method=cv2.CHAIN_APPROX_NONE)
+        # cv2.drawContours(img2, num_contours, -1, (0,255,0), 1)
+        # # cv2.imshow("Image of car ",img2)
+        # # cv2.waitKey(1000)
+        # # cv2.destroyAllWindows()
         
         
-        for i,cnt in enumerate(num_contours):
-            min_rect = cv2.minAreaRect(cnt)
-            if ratio_and_rotation(min_rect):
-                x,y,w,h = cv2.boundingRect(cnt)
-                plate_img = self.img[y:y+h,x:x+w]
-                if(isMaxWhite(plate_img)):
-                    clean_plate, rect = clean2_plate(plate_img)
-                    if rect:
-                        fg=0
-                        x1,y1,w1,h1 = rect
-                        x,y,w,h = x+x1,y+y1,w1,h1
-                        plate_im = Image.fromarray(clean_plate)
-                        text = pytesseract.image_to_string(plate_im, lang='eng')
-                        return text
+        # for i,cnt in enumerate(num_contours):
+        #     min_rect = cv2.minAreaRect(cnt)
+        #     if ratio_and_rotation(min_rect):
+        #         x,y,w,h = cv2.boundingRect(cnt)
+        #         plate_img = self.img[y:y+h,x:x+w]
+        #         if(isMaxWhite(plate_img)):
+        #             clean_plate, rect = clean2_plate(plate_img)
+        #             if rect:
+        #                 fg=0
+        #                 x1,y1,w1,h1 = rect
+        #                 x,y,w,h = x+x1,y+y1,w1,h1
+        #                 plate_im = Image.fromarray(clean_plate)
+        #                 text = pytesseract.image_to_string(plate_im, lang='eng')
+        #                 return text
 
 
 # img_rez = cv2.resize(img, None, fx=0.5, fy=0.5)
