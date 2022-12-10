@@ -307,23 +307,33 @@ def main():
         with col15:
             st.subheader("Check Payment")
             val = json.load(open("entries.json"))
-            st.text(val)
+            if "carid" in val:
+                st.text("The car exists in the data")
+                if val["carid"]["payment"] == "1":
+                    st.text("Payment is done")
+                else:
+                    st.text("Please pay for the parking.")
+            else:
+                st.text("The Vehicle is not Allowed")
+            # st.text(val)
 
         with col16:
             st.subheader("Mark paid")
             val = json.load(open("entries.json"))
-            result = val["carid"]
-            result = result["payment"]
-            if(int(result) == 1):
-                st.text("Payment is done")
+            if "carid" in val:
+                result = val["carid"]["payment"]
+                if(int(result) == 1):
+                    st.text("Payment is done")
+                else:
+                    if st.button("Paid"):
+                        val["carid"]["payment"] = "1"
+                        # Serializing json
+                        json_object = json.dumps(val)
+                        
+                        # Writing to sample.json
+                        with open("entries.json", "w") as outfile:
+                            outfile.write(json_object)
             else:
-                if st.button("Paid"):
-                    val["carid"]["payment"] = "1"
-                    # Serializing json
-                    json_object = json.dumps(val)
-                    
-                    # Writing to sample.json
-                    with open("entries.json", "w") as outfile:
-                        outfile.write(json_object)
+                st.text("Contact the admin")
 
 
