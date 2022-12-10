@@ -17,7 +17,7 @@ def main():
     """define the steamlit UI"""
     # st.set_page_config(layout="wide")
     st.header("PyTesseract Image Processing")
-    st.subheader("Optical character recognition (OCR)")
+    st.subheader("Number Plate Recognition")
     uploaded_file = st.sidebar.file_uploader("Choose an image file")
     def number_plate_detection(img):
         def clean2_plate(plate):
@@ -301,6 +301,12 @@ def main():
             res2 = str("".join(re.split("[^a-zA-Z0-9]*", str(number_plate))))
             res2=res2.upper()
             st.text(res2)
-            val = json.loads("../entries.json")
-            st.text(val)
                 # print(res2)
+        
+        with col15:
+            st.subheader("Check Payment")
+            val = json.loads(open("../entries.json"))
+            st.text(val)
+            result = val["car1"]
+            st.text(result)
+
