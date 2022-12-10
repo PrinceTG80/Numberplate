@@ -310,8 +310,8 @@ def main():
             val = json.load(open("entries.json"))
             if carid in val:
                 st.text("The car exists in the data")
-                if val["carid"]["payment"] == "1":
-                    st.text("Car is parked in "+ str(val["carid"]["parking"]))
+                if val[carid]["payment"] == "1":
+                    st.text("Car is parked in "+ str(val[carid]["parking"]))
                 else:
                     st.text("Please pay for the parking.")
             else:
@@ -322,12 +322,12 @@ def main():
             st.subheader("Mark paid")
             val = json.load(open("entries.json"))
             if "carid" in val:
-                result = val["carid"]["payment"]
+                result = val[carid]["payment"]
                 if(int(result) == 1):
                     st.text("Payment is done")
                 else:
                     if st.button("Paid"):
-                        val["carid"]["payment"] = "1"
+                        val[carid]["payment"] = "1"
                         # Serializing json
                         json_object = json.dumps(val)
                         
