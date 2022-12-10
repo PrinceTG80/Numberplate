@@ -295,26 +295,25 @@ def main():
         #             st.image(roi_img)
         col14,col15,col16 = st.columns(3)
         with col14:
-            with st.expander("Gray Scale image"):
-                st.subheader("Gray Scale image")                   
+            with st.expander("Gray Scale image"):                  
                 number_plate,img1,img2,edged,image1,image2,new_img=image.number_plate_detection()
                 st.image(img1)
         with col15:
-            st.subheader("Smoothened image")                   
-            st.image(img2)
+            with st.expander("Smoothened image"):                  
+                st.image(img2)
         with col16:
-            st.subheader("Edged image")                   
-            st.image(edged)
+            with st.expander("Edged image"):                
+                st.image(edged)
         col20,col21,col22 =st.columns(3)
         with col20:
-            st.subheader("All Contours drawn image")                   
-            st.image(image1)
+            with st.expander("All Contours drawn image"):                   
+                st.image(image1)
         with col21:
-            st.subheader("TOp 30 contours image")                   
-            st.image(image2)
+            with st.expander("TOp 30 contours image"):                
+                st.image(image2)
         with col22:
-            st.subheader("Focused image")                   
-            st.image(new_img)
+            with st.expander("Focused image"):             
+                st.image(new_img)
         col17,col18,col19 = st.columns(3)
         with col17:
             st.subheader("Number Plate")
