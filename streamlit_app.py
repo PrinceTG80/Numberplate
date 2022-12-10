@@ -13,6 +13,7 @@ from PIL import Image
 import re
 import json
 
+
 def main():
     """define the steamlit UI"""
     # st.set_page_config(layout="wide")
@@ -168,7 +169,7 @@ def main():
 
     array=[]
 
-    dir = "C:/Users/HP/Desktop/Automatic-Number-plate-detection-for-Indian-vehicles-main/Automatic-Number-plate-detection-for-Indian-vehicles-main"
+    # dir = "C:/Users/HP/Desktop/Automatic-Number-plate-detection-for-Indian-vehicles-main/Automatic-Number-plate-detection-for-Indian-vehicles-main"
 
     # for img in glob.glob(dir+"/Dataset/*.jpeg") :
     #     img=cv2.imread(img)
@@ -305,7 +306,7 @@ def main():
         
         with col15:
             st.subheader("Check Payment")
-            val = json.load(open("../entries.json"))
+            val = json.load(open("entries.json"))
             st.text(val)
             result = val["car1"]
             st.text(result)
