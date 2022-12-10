@@ -321,7 +321,7 @@ def main():
         with col16:
             st.subheader("Mark paid")
             val = json.load(open("entries.json"))
-            if "carid" in val:
+            if carid in val:
                 result = val[carid]["payment"]
                 if(int(result) == 1):
                     st.text("Payment is done")
