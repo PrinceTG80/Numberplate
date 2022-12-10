@@ -302,15 +302,16 @@ def main():
             res2 = str("".join(re.split("[^a-zA-Z0-9]*", str(number_plate))))
             res2=res2.upper()
             st.text(res2)
+            carid = res2
                 # print(res2)
         
         with col15:
             st.subheader("Check Payment")
             val = json.load(open("entries.json"))
-            if "carid" in val:
+            if carid in val:
                 st.text("The car exists in the data")
                 if val["carid"]["payment"] == "1":
-                    st.text("Payment is done")
+                    st.text("Car is parked in "+ str(val["carid"]["parking"]))
                 else:
                     st.text("Please pay for the parking.")
             else:

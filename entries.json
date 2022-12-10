@@ -1,6 +1,10 @@
 {
-    "carid": {
+    "MH20EE7598": {
         "payment" : "0",
         "parking": "P1"
+    },
+    "newCar": {
+        "payment" : "0",
+        "parking": "P2"
     }
 }
