@@ -305,7 +305,7 @@ def main():
         
         with col15:
             st.subheader("Check Payment")
-            val = json.loads(open("../entries.json"))
+            val = json.load(open("../entries.json"))
             st.text(val)
             result = val["car1"]
             st.text(result)
