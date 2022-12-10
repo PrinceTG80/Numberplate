@@ -308,6 +308,22 @@ def main():
             st.subheader("Check Payment")
             val = json.load(open("entries.json"))
             st.text(val)
-            result = val["car1"]
-            st.text(result)
+
+        with col16:
+            st.subheader("Mark paid")
+            val = json.load(open("entries.json"))
+            result = val["carid"]
+            result = result["payment"]
+            if(int(result) == 1):
+                st.text("Payment is done")
+            else:
+                if st.button("Paid"):
+                    val["carid"]["payment"] = "1"
+                    # Serializing json
+                    json_object = json.dumps(val)
+                    
+                    # Writing to sample.json
+                    with open("entries.json", "w") as outfile:
+                        outfile.write(json_object)
+
 
