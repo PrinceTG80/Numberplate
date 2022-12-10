@@ -190,34 +190,34 @@ class Image_Processing:
         #         return True
         
         img2 = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
-        cv2.imshow("Image of car ",img2)
-        cv2.waitKey(1000)
-        cv2.destroyAllWindows()
+        # cv2.imshow("Image of car ",img2)
+        # cv2.waitKey(1000)
+        # cv2.destroyAllWindows()
         
         # img2 = cv2.GaussianBlur(img2, (5,5), 0)
         img2 = cv2.bilateralFilter(img2, 11, 17, 17) 
-        cv2.imshow("Image of car ",img2)
-        cv2.waitKey(1000)
-        cv2.destroyAllWindows()
+        # cv2.imshow("Image of car ",img2)
+        # cv2.waitKey(1000)
+        # cv2.destroyAllWindows()
 
         edged = cv2.Canny(img2, 100, 200,apertureSize = 3, L2gradient = True) 
-        cv2.imshow("edged image", edged)
-        cv2.waitKey(1000)
-        cv2.destroyAllWindows()
+        # cv2.imshow("edged image", edged)
+        # cv2.waitKey(1000)
+        # cv2.destroyAllWindows()
 
         cnts,new = cv2.findContours(edged.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         image1=self.img.copy()
         cv2.drawContours(image1,cnts,-1,(0,255,0),3)
-        cv2.imshow("contours",image1)
-        cv2.waitKey(1000)
-        cv2.destroyAllWindows()
+        # cv2.imshow("contours",image1)
+        # cv2.waitKey(1000)
+        # cv2.destroyAllWindows()
 
         cnts = sorted(cnts, key = cv2.contourArea, reverse = True) [:30]
         image2 = self.img.copy()
         cv2.drawContours(image2,cnts,-1,(0,255,0),3)
-        cv2.imshow("Top 30 contours",image2)
-        cv2.waitKey(1000)
-        cv2.destroyAllWindows()
+        # cv2.imshow("Top 30 contours",image2)
+        # cv2.waitKey(1000)
+        # cv2.destroyAllWindows()
         num_plate = "NONE"
         i=7
         for c in cnts:
