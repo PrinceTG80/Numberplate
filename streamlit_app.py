@@ -192,15 +192,15 @@ def main():
         st.sidebar.image(uploaded_file)
         image = Image_Processing(uploaded_file)
 
-        # col1, col2 = st.columns(2)
-        # with col2:
-        #     st.subheader("Thresh settings")
-        #     lower = st.slider("Lower bound", 0, 255, 100)
-        #     upper = st.slider("Upper bound", 0, 255, 255)
-        # with col1:
-        #     st.subheader("Thresh")
-        #     thresh = image.threshold_img(lower, upper)
-        #     st.image(thresh)
+        col1, col2 = st.columns(2)
+        with col2:
+            st.subheader("Thresh settings")
+            lower = st.slider("Lower bound", 0, 255, 100)
+            upper = st.slider("Upper bound", 0, 255, 255)
+        with col1:
+            st.subheader("Thresh")
+            thresh = image.threshold_img(lower, upper)
+            st.image(thresh)
 
         # col3, col4 = st.columns(2)
         # with col4:
